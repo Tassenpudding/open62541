@@ -215,7 +215,7 @@ START_TEST(SecureChannel_sendAsymmetricOPNMessage_sentDataIsValid) {
     retval = UA_decodeBinaryInternal(&sentData, &offset, &asymSecurityHeader, &UA_TRANSPORT[UA_TRANSPORT_ASYMMETRICALGORITHMSECURITYHEADER], NULL);
     ck_assert_uint_eq(retval, UA_STATUSCODE_GOOD);
 
-    ck_assert_msg(UA_ByteString_equal(&testChannel.securityPolicy->policyUri,
+    ck_assert_msg(UA_String_equal(&testChannel.securityPolicy->policyUri,
                                       &asymSecurityHeader.securityPolicyUri),
                   "Expected securityPolicyUri to be equal to the one used by the secureChannel");
 
@@ -295,7 +295,7 @@ START_TEST(Securechannel_sendAsymmetricOPNMessage_extraPaddingPresentWhenKeyLarg
     ck_assert_uint_eq(retval, UA_STATUSCODE_GOOD);
     ck_assert_msg(UA_ByteString_equal(&dummyCertificate, &asymSecurityHeader.senderCertificate),
                   "Expected the certificate to be equal to the one used  by the secureChannel");
-    ck_assert_msg(UA_ByteString_equal(&testChannel.securityPolicy->policyUri,
+    ck_assert_msg(UA_String_equal(&testChannel.securityPolicy->policyUri,
                                       &asymSecurityHeader.securityPolicyUri),
                   "Expected securityPolicyUri to be equal to the one used by the secureChannel");
     UA_ByteString thumbPrint = {20, testChannel.remoteCertificateThumbprint};

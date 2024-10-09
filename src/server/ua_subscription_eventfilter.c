@@ -330,7 +330,7 @@ castImplicitFromString(const UA_Variant *in, const UA_DataType *outType, UA_Vari
         void *outData = UA_new(outType);
         if(!outData)
             return UA_STATUSCODE_BADOUTOFMEMORY;
-        res = UA_decodeJson((const UA_ByteString*)in->data, outData, outType, NULL);
+        res = UA_decodeJson((const UA_String*)in->data, outData, outType, NULL);
         if(res != UA_STATUSCODE_GOOD) {
             UA_free(outData);
             return res;

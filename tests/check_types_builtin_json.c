@@ -1356,7 +1356,8 @@ END_TEST
 /* ByteString */
 START_TEST(UA_NodeId_ByteString_json_encode) {
     UA_NodeId *src = UA_NodeId_new();
-    *src = UA_NODEID_BYTESTRING_ALLOC(0, "asdfasdf");
+    UA_Byte arr[5] = { 0x00, 0x0A, 0x00, 0x0F };
+    *src = UA_NODEID_BYTESTRING_ALLOC(0, arr, sizeof(arr));
     const UA_DataType *type = &UA_TYPES[UA_TYPES_NODEID];
     size_t size = UA_calcSizeJson((void *) src, type, NULL);
     //{"IdType":3,"Id":"YXNkZmFzZGY="}
@@ -5862,4 +5863,3 @@ int main(void) {
     srunner_free(sr);
     return (number_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
-

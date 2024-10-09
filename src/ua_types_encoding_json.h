@@ -105,7 +105,7 @@ extern const encodeJsonSignature encodeJsonJumpTable[UA_DATATYPEKINDS];
 extern const decodeJsonSignature decodeJsonJumpTable[UA_DATATYPEKINDS];
 
 UA_StatusCode lookAheadForKey(ParseCtx *ctx, const char *search, size_t *resultIndex);
-UA_StatusCode tokenize(ParseCtx *ctx, const UA_ByteString *src, size_t tokensSize,
+UA_StatusCode tokenize(ParseCtx *ctx, const UA_String *src, size_t tokensSize,
                        size_t *decodedLength);
 
 static UA_INLINE

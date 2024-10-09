@@ -1280,7 +1280,7 @@ const encodeJsonSignature encodeJsonJumpTable[UA_DATATYPEKINDS] = {
 };
 
 UA_StatusCode
-UA_encodeJson(const void *src, const UA_DataType *type, UA_ByteString *outBuf,
+UA_encodeJson(const void *src, const UA_DataType *type, UA_String *outBuf,
               const UA_EncodeJsonOptions *options) {
     if(!src || !type)
         return UA_STATUSCODE_BADINTERNALERROR;
@@ -1290,7 +1290,7 @@ UA_encodeJson(const void *src, const UA_DataType *type, UA_ByteString *outBuf,
     status res = UA_STATUSCODE_GOOD;
     if(outBuf->length == 0) {
         size_t len = UA_calcSizeJson(src, type, options);
-        res = UA_ByteString_allocBuffer(outBuf, len);
+        res = UA_String_allocBuffer(outBuf, len);
         if(res != UA_STATUSCODE_GOOD)
             return res;
         allocated = true;
@@ -1322,7 +1322,7 @@ UA_encodeJson(const void *src, const UA_DataType *type, UA_ByteString *outBuf,
     if(res == UA_STATUSCODE_GOOD)
         outBuf->length = (size_t)((uintptr_t)ctx.pos - (uintptr_t)outBuf->data);
     else if(allocated)
-        UA_ByteString_clear(outBuf);
+        UA_String_clear(outBuf);
     return res;
 }
 
@@ -2823,7 +2823,7 @@ const decodeJsonSignature decodeJsonJumpTable[UA_DATATYPEKINDS] = {
 };
 
 status
-tokenize(ParseCtx *ctx, const UA_ByteString *src, size_t tokensSize,
+tokenize(ParseCtx *ctx, const UA_String *src, size_t tokensSize,
          size_t *decodedLength) {
     /* Tokenize */
     cj5_options options;
@@ -2858,7 +2858,7 @@ tokenize(ParseCtx *ctx, const UA_ByteString *src, size_t tokensSize,
 }
 
 UA_StatusCode
-UA_decodeJson(const UA_ByteString *src, void *dst, const UA_DataType *type,
+UA_decodeJson(const UA_String *src, void *dst, const UA_DataType *type,
               const UA_DecodeJsonOptions *options) {
     if(!dst || !src || !type)
         return UA_STATUSCODE_BADARGUMENTSMISSING;

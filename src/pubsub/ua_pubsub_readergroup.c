@@ -886,7 +886,8 @@ ReaderGroupChannelCallback(UA_ConnectionManager *cm, uintptr_t connectionId,
         res = UA_PubSubConnection_decodeNetworkMessage(psm, rg->linkedConnection, msg, &nm);
     } else { /* if(writerGroup->config.encodingMimeType == UA_PUBSUB_ENCODING_JSON) */
 #ifdef UA_ENABLE_JSON_ENCODING
-        res = UA_NetworkMessage_decodeJson(&msg, &nm, NULL);
+        UA_String msgStr = { .length = msg.length, .data = msg.data };
+        res = UA_NetworkMessage_decodeJson(&msgStr, &nm, NULL);
 #else
         res = UA_STATUSCODE_BADNOTSUPPORTED;
 #endif

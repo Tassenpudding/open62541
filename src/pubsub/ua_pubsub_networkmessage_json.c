@@ -221,7 +221,7 @@ UA_NetworkMessage_encodeJsonInternal(const UA_NetworkMessage *src,
 
 UA_StatusCode
 UA_NetworkMessage_encodeJson(const UA_NetworkMessage *src,
-                             UA_ByteString *outBuf,
+                             UA_String *outBuf,
                              const UA_EncodeJsonOptions *options) {
     UA_Boolean alloced = (outBuf->length == 0);
     UA_StatusCode ret = UA_STATUSCODE_GOOD;
@@ -229,7 +229,7 @@ UA_NetworkMessage_encodeJson(const UA_NetworkMessage *src,
         size_t length = UA_NetworkMessage_calcSizeJson(src, options);
         if(length == 0)
             return UA_STATUSCODE_BADENCODINGERROR;
-        ret = UA_ByteString_allocBuffer(outBuf, length);
+        ret = UA_String_allocBuffer(outBuf, length);
         if(ret != UA_STATUSCODE_GOOD)
             return ret;
     }
@@ -553,7 +553,7 @@ NetworkMessage_decodeJsonInternal(ParseCtx *ctx, UA_NetworkMessage *dst) {
 }
 
 UA_StatusCode
-UA_NetworkMessage_decodeJson(const UA_ByteString *src,
+UA_NetworkMessage_decodeJson(const UA_String *src,
                              UA_NetworkMessage *dst,
                              const UA_DecodeJsonOptions *options) {
     /* Set up the context */

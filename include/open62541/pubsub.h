@@ -201,7 +201,7 @@ UA_NetworkMessage_decodeBinary(const UA_ByteString *src,
  * The encoding options can be NULL. */
 UA_EXPORT UA_StatusCode
 UA_NetworkMessage_encodeJson(const UA_NetworkMessage *src,
-                             UA_ByteString *outBuf,
+                             UA_String *outBuf,
                              const UA_EncodeJsonOptions *options);
 
 /* The encoding options can be NULL */
@@ -211,7 +211,7 @@ UA_NetworkMessage_calcSizeJson(const UA_NetworkMessage *src,
 
 /* The encoding options can be NULL */
 UA_EXPORT UA_StatusCode
-UA_NetworkMessage_decodeJson(const UA_ByteString *src,
+UA_NetworkMessage_decodeJson(const UA_String *src,
                              UA_NetworkMessage *dst,
                              const UA_DecodeJsonOptions *options);
 

@@ -64,7 +64,7 @@ readPrivateKeyPassword(UA_ByteString *password) {
     if(buf[len-1] == '\n')
         buf[len-1] = 0;
 
-    *password = UA_BYTESTRING_ALLOC(buf);
+    *password = UA_BYTESTRING_ALLOC(buf, len);
     return UA_STATUSCODE_GOOD;
 }
 #endif
@@ -1783,7 +1783,7 @@ UA_ClientConfig_setDefaultEncryption(UA_ClientConfig *config,
     /*                    "Could not add SecurityPolicy#Basic256 with error code %s", */
     /*                    UA_StatusCode_name(retval)); */
     /* } */
-                  
+
     retval = UA_SecurityPolicy_Aes256Sha256RsaPss(&config->securityPolicies[config->securityPoliciesSize],
                                                   localCertificate, decryptedPrivateKey, config->logging);
     if(retval == UA_STATUSCODE_GOOD) {

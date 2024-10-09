@@ -291,7 +291,7 @@ UA_PubSubConnection_process(UA_PubSubManager *psm, UA_PubSubConnection *c,
         if(!(rg->config.rtLevel & UA_PUBSUB_RT_FIXED_SIZE)) {
             nonRtRg = rg;
             continue;
-        } 
+        }
         processed |= UA_ReaderGroup_decodeAndProcessRT(psm, rg, msg);
     }
 
@@ -307,7 +307,8 @@ UA_PubSubConnection_process(UA_PubSubManager *psm, UA_PubSubConnection *c,
         res = UA_PubSubConnection_decodeNetworkMessage(psm, c, msg, &nm);
     } else { /* if(writerGroup->config.encodingMimeType == UA_PUBSUB_ENCODING_JSON) */
 #ifdef UA_ENABLE_JSON_ENCODING
-        res = UA_NetworkMessage_decodeJson(&msg, &nm, NULL);
+        UA_String msgStr = { .length = msg.length, .data = msg.data };
+        res = UA_NetworkMessage_decodeJson(&msgStr, &nm, NULL);
         if(res != UA_STATUSCODE_GOOD) {
             UA_LOG_WARNING_PUBSUB(psm->logging, c,
                                   "Decoding the JSON network message failed");
@@ -555,7 +556,7 @@ UA_PubSubConnection_attachRecvConnection(UA_PubSubManager *psm,
 }
 
 static void
-UA_PubSubConnection_disconnect(UA_PubSubConnection *c) {   
+UA_PubSubConnection_disconnect(UA_PubSubConnection *c) {
     if(!c->cm)
         return;
     if(c->sendChannel != 0)
@@ -631,7 +632,7 @@ PubSubChannelCallback(UA_ConnectionManager *cm, uintptr_t connectionId,
     /* Message received */
     if(UA_LIKELY(recv && msg.length > 0))
         UA_PubSubConnection_process(psm, psc, msg);
-    
+
     UA_UNLOCK(&server->serviceMutex);
 }
 

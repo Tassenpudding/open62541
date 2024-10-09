@@ -33,7 +33,7 @@ join_string_with_sep(const UA_String *strings, size_t stringsSize,
         totalSize += strings[iStr].length;
     }
 
-    UA_ByteString_allocBuffer(out, totalSize);
+    UA_String_allocBuffer(out, totalSize);
     if(!out->data) {
         return UA_STATUSCODE_BADOUTOFMEMORY;
     }
@@ -152,7 +152,7 @@ UA_CreateCertificate(const UA_Logger *logger, const UA_String *subject,
     if((pkey == NULL) || (x509 == NULL)) {
         errRet = UA_STATUSCODE_BADOUTOFMEMORY;
         goto cleanup;
-    }    
+    }
 #else
     BIGNUM *exponent = BN_new();
     EVP_PKEY *pkey = EVP_PKEY_new();
@@ -412,7 +412,7 @@ cleanup:
     UA_String_clear(&fullAltSubj);
 #if (OPENSSL_VERSION_NUMBER < 0x30000000L)
     RSA_free(rsa);
-    BN_free(exponent);    
+    BN_free(exponent);
 #endif
     X509_free(x509);
     EVP_PKEY_free(pkey);

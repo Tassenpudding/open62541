@@ -1187,4 +1187,3 @@ UA_Server_run(UA_Server *server, const volatile UA_Boolean *running) {
     }
     return UA_Server_run_shutdown(server);
 }
-
