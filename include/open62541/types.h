@@ -1312,11 +1312,11 @@ UA_calcSizeJson(const void *src, const UA_DataType *type,
  *
  * @param src The value. Must not be NULL.
  * @param type The value type. Must not be NULL.
- * @param outBuf Pointer to ByteString containing the result if the encoding
+ * @param outBuf Pointer to String containing the result if the encoding
  *        was successful
  * @return Returns a statuscode whether encoding succeeded. */
 UA_StatusCode UA_EXPORT
-UA_encodeJson(const void *src, const UA_DataType *type, UA_ByteString *outBuf,
+UA_encodeJson(const void *src, const UA_DataType *type, UA_String *outBuf,
               const UA_EncodeJsonOptions *options);
 
 /* The structure with the decoding options may be extended in the future.
@@ -1346,7 +1346,7 @@ typedef struct {
  * @param options The options struct for decoding.
  * @return Returns a statuscode whether decoding succeeded. */
 UA_StatusCode UA_EXPORT
-UA_decodeJson(const UA_ByteString *src, void *dst, const UA_DataType *type,
+UA_decodeJson(const UA_String *src, void *dst, const UA_DataType *type,
               const UA_DecodeJsonOptions *options);
 
 #endif /* UA_ENABLE_JSON_ENCODING */
@@ -1383,7 +1383,7 @@ UA_calcSizeXml(const void *src, const UA_DataType *type,
  *        was successful
  * @return Returns a statuscode whether encoding succeeded. */
 UA_StatusCode UA_EXPORT
-UA_encodeXml(const void *src, const UA_DataType *type, UA_ByteString *outBuf,
+UA_encodeXml(const void *src, const UA_DataType *type, UA_String *outBuf,
              const UA_EncodeXmlOptions *options);
 
 /* The structure with the decoding options may be extended in the future.
@@ -1405,7 +1405,7 @@ typedef struct {
  * @param options The options struct for decoding, currently unused
  * @return Returns a statuscode whether decoding succeeded. */
 UA_StatusCode UA_EXPORT
-UA_decodeXml(const UA_ByteString *src, void *dst, const UA_DataType *type,
+UA_decodeXml(const UA_String *src, void *dst, const UA_DataType *type,
              const UA_DecodeXmlOptions *options);
 
 #endif /* UA_ENABLE_XML_ENCODING */

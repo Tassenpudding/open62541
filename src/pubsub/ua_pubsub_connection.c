@@ -307,7 +307,8 @@ UA_PubSubConnection_process(UA_PubSubManager *psm, UA_PubSubConnection *c,
         res = UA_PubSubConnection_decodeNetworkMessage(psm, c, msg, &nm);
     } else { /* if(writerGroup->config.encodingMimeType == UA_PUBSUB_ENCODING_JSON) */
 #ifdef UA_ENABLE_JSON_ENCODING
-        res = UA_NetworkMessage_decodeJson(&msg, &nm, NULL);
+        UA_String msgStr = { .length = msg.length, .data = msg.data };
+        res = UA_NetworkMessage_decodeJson(&msgStr, &nm, NULL);
         if(res != UA_STATUSCODE_GOOD) {
             UA_LOG_WARNING_PUBSUB(psm->logging, c,
                                   "Decoding the JSON network message failed");

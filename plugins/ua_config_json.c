@@ -23,10 +23,10 @@ typedef struct {
     UA_Byte depth;
 } ParsingCtx;
 
-static UA_ByteString
+static UA_String
 getJsonPart(cj5_token tok, const char *json) {
-    UA_ByteString bs;
-    UA_ByteString_init(&bs);
+    UA_String bs;
+    UA_String_init(&bs);
     if(tok.type == CJ5_TOKEN_STRING) {
         bs.data = (UA_Byte*)(uintptr_t)(json + tok.start - 1);
         bs.length = (tok.end - tok.start) + 3;
@@ -91,7 +91,7 @@ extern const parseJsonSignature parseJsonJumpTable[UA_SERVERCONFIGFIELDKINDS];
 /*----------------------Basic Types------------------------*/
 PARSE_JSON(Int64Field) {
     cj5_token tok = ctx->tokens[++ctx->index];
-    UA_ByteString buf = getJsonPart(tok, ctx->json);
+    UA_String buf = getJsonPart(tok, ctx->json);
     UA_Int64 out;
     UA_StatusCode retval = UA_decodeJson(&buf, &out, &UA_TYPES[UA_TYPES_INT64], NULL);
     if(retval != UA_STATUSCODE_GOOD)
@@ -102,7 +102,7 @@ PARSE_JSON(Int64Field) {
 }
 PARSE_JSON(UInt16Field) {
     cj5_token tok = ctx->tokens[++ctx->index];
-    UA_ByteString buf = getJsonPart(tok, ctx->json);
+    UA_String buf = getJsonPart(tok, ctx->json);
     UA_UInt16 out;
     UA_StatusCode retval = UA_decodeJson(&buf, &out, &UA_TYPES[UA_TYPES_UINT16], NULL);
     if(retval != UA_STATUSCODE_GOOD)
@@ -113,7 +113,7 @@ PARSE_JSON(UInt16Field) {
 }
 PARSE_JSON(UInt32Field) {
     cj5_token tok = ctx->tokens[++ctx->index];
-    UA_ByteString buf = getJsonPart(tok, ctx->json);
+    UA_String buf = getJsonPart(tok, ctx->json);
     UA_UInt32 out;
     UA_StatusCode retval = UA_decodeJson(&buf, &out, &UA_TYPES[UA_TYPES_UINT32], NULL);
     if(retval != UA_STATUSCODE_GOOD)
@@ -124,7 +124,7 @@ PARSE_JSON(UInt32Field) {
 }
 PARSE_JSON(UInt64Field) {
     cj5_token tok = ctx->tokens[++ctx->index];
-    UA_ByteString buf = getJsonPart(tok, ctx->json);
+    UA_String buf = getJsonPart(tok, ctx->json);
     UA_UInt64 out;
     UA_StatusCode retval = UA_decodeJson(&buf, &out, &UA_TYPES[UA_TYPES_UINT64], NULL);
     if(retval != UA_STATUSCODE_GOOD)
@@ -135,7 +135,7 @@ PARSE_JSON(UInt64Field) {
 }
 PARSE_JSON(StringField) {
     cj5_token tok = ctx->tokens[++ctx->index];
-    UA_ByteString buf = getJsonPart(tok, ctx->json);
+    UA_String buf = getJsonPart(tok, ctx->json);
     UA_String out;
     UA_StatusCode retval = UA_decodeJson(&buf, &out, &UA_TYPES[UA_TYPES_STRING], NULL);
     if(retval != UA_STATUSCODE_GOOD)
@@ -167,7 +167,7 @@ PARSE_JSON(LocalizedTextField) {
             cj5_get_str(&ctx->result, (unsigned int)ctx->index, field, &str_len);
 
             tok = ctx->tokens[++ctx->index];
-            UA_ByteString buf = getJsonPart(tok, ctx->json);
+            UA_String buf = getJsonPart(tok, ctx->json);
             if(strcmp(field, "locale") == 0)
                 retval |= UA_decodeJson(&buf, &locale, &UA_TYPES[UA_TYPES_STRING], NULL);
             else if(strcmp(field, "text") == 0)
@@ -196,7 +196,7 @@ PARSE_JSON(LocalizedTextField) {
 }
 PARSE_JSON(DoubleField) {
     cj5_token tok = ctx->tokens[++ctx->index];
-    UA_ByteString buf = getJsonPart(tok, ctx->json);
+    UA_String buf = getJsonPart(tok, ctx->json);
     UA_Double out;
     UA_StatusCode retval = UA_decodeJson(&buf, &out, &UA_TYPES[UA_TYPES_DOUBLE], NULL);
     if(retval != UA_STATUSCODE_GOOD)
@@ -207,7 +207,7 @@ PARSE_JSON(DoubleField) {
 }
 PARSE_JSON(BooleanField) {
     cj5_token tok = ctx->tokens[++ctx->index];
-    UA_ByteString buf = getJsonPart(tok, ctx->json);
+    UA_String buf = getJsonPart(tok, ctx->json);
     UA_Boolean out;
     if(tok.type != CJ5_TOKEN_BOOL) {
         UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Value of type bool expected.");
@@ -423,7 +423,7 @@ PARSE_JSON(UInt32ArrayField) {
 }
 PARSE_JSON(DateTimeField) {
     cj5_token tok = ctx->tokens[++ctx->index];
-    UA_ByteString buf = getJsonPart(tok, ctx->json);
+    UA_String buf = getJsonPart(tok, ctx->json);
     UA_DateTime out;
     UA_DateTime_init(&out);
     UA_StatusCode retval = UA_decodeJson(&buf, &out, &UA_TYPES[UA_TYPES_DATETIME], NULL);
@@ -766,7 +766,7 @@ PARSE_JSON(SecurityPkiField) {
     UA_String pkiFolder = {.length = 0, .data = NULL};
 
     cj5_token tok = ctx->tokens[++ctx->index];
-    UA_ByteString buf = getJsonPart(tok, ctx->json);
+    UA_String buf = getJsonPart(tok, ctx->json);
     UA_StatusCode retval = UA_decodeJson(&buf, &pkiFolder, &UA_TYPES[UA_TYPES_STRING], NULL);
     if(retval != UA_STATUSCODE_GOOD)
         return retval;
@@ -869,7 +869,7 @@ const parseJsonSignature parseJsonJumpTable[UA_SERVERCONFIGFIELDKINDS] = {
 };
 
 static UA_StatusCode
-parseJSONConfig(UA_ServerConfig *config, UA_ByteString json_config) {
+parseJSONConfig(UA_ServerConfig *config, UA_String json_config) {
     // Parsing json config
     const char *json = (const char*)json_config.data;
     cj5_token tokens[MAX_TOKENS];
@@ -1009,7 +1009,7 @@ parseJSONConfig(UA_ServerConfig *config, UA_ByteString json_config) {
 }
 
 UA_Server *
-UA_Server_newFromFile(const UA_ByteString json_config) {
+UA_Server_newFromFile(const UA_String json_config) {
     UA_ServerConfig config;
     memset(&config, 0, sizeof(UA_ServerConfig));
     UA_StatusCode res = UA_ServerConfig_setDefault(&config);
@@ -1020,7 +1020,7 @@ UA_Server_newFromFile(const UA_ByteString json_config) {
 }
 
 UA_StatusCode
-UA_ServerConfig_updateFromFile(UA_ServerConfig *config, const UA_ByteString json_config) {
+UA_ServerConfig_updateFromFile(UA_ServerConfig *config, const UA_String json_config) {
     UA_StatusCode res = parseJSONConfig(config, json_config);
     return res;
 }

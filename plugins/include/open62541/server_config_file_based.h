@@ -18,7 +18,7 @@ _UA_BEGIN_DECLS
  * @param json The configuration in json5 format.
  */
 UA_EXPORT UA_Server *
-UA_Server_newFromFile(const UA_ByteString json_config);
+UA_Server_newFromFile(const UA_String json_config);
 
 /* Loads the server configuration from a Json5 file into the server.
  *
@@ -26,7 +26,7 @@ UA_Server_newFromFile(const UA_ByteString json_config);
  * @param json The configuration in json5 format.
  */
 UA_EXPORT UA_StatusCode
-UA_ServerConfig_updateFromFile(UA_ServerConfig *config, const UA_ByteString json_config);
+UA_ServerConfig_updateFromFile(UA_ServerConfig *config, const UA_String json_config);
 
 _UA_END_DECLS
 
